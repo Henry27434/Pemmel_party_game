@@ -82,7 +82,7 @@ canvas {
     z-index: -1;
 }
 
-/* Game Over Screen - similar to menu */
+/* Game Over Screen */
 #gameOverContainer {
     position: fixed;
     top: 0;
@@ -101,16 +101,22 @@ canvas {
     color: red;
     font-size: 72px;
     margin-bottom: 20px;
+    z-index: 102; /* Above the GIF */
+    position: relative;
 }
 
 /* Comically huge */
 #gameOverGif {
-    width: 1000px; 
+    width: 2100px;  /* MASSIVE! */
     height: auto;
-    margin-bottom: 30px;
+    position: absolute; /* Position it absolutely */
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); /* Center it */
+    z-index: 101; /* Behind the button */
 }
 
-/* Try Again button */
+/* Try Again button - overlaps the GIF */
 #tryAgainButton {
     background-color: #ff0000;
     color: white;
@@ -122,9 +128,11 @@ canvas {
     font-weight: bold;
     box-shadow: 0 8px 16px rgba(0,0,0,0.3);
     transition: transform 0.2s;
+    position: relative;
+    z-index: 102; /* Above the GIF */
 }
 
 #tryAgainButton:hover {
-    transform: scale(1.1);
+    transform: scale(1.3);
     background-color: #cc0000;
 }
