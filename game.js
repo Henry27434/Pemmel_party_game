@@ -2,21 +2,63 @@
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
 // player
+
+// Game state management
+let gameState = 'menu'; // Can be: 'menu', 'playing', 'gameover'
+
 var startButton = document.getElementById('startButton');
 var menuContainer = document.getElementById('menuContainer');
 var menuGif = document.getElementById('menuGif');
-startButton.addEventListener('click', function() {
-    // Step 1: Hide button immediately
-    startButton.classList.add('hidden');
+var gameOverContainer = document.getElementById('gameOverContainer');
+var tryAgainButton = document.getElementById('tryAgainButton');
+
+function resetGame() {
+    // Clear all logs
+    logs.length = 0;
     
-    // Step 2: Start the GIF falling animation
+    // Reset player
+    player.lives = 5;
+    player.y = 350;
+    player.lane = 1;
+    player.invincibleFrames = 0;
+    player.color = 'blue';
+    
+    // Reset player 2
+    player2.lives = 5;
+    player2.y = 300;
+    player2.lane = 0;
+    player2.invincibleFrames = 0;
+    player2.color = 'red';
+    
+    // Reset game variables
+    player1Score = 0;
+    speed = 2;
+    logInterval = 0;
+}
+
+// Start button handler
+startButton.addEventListener('click', function() {
+    startButton.classList.add('hidden');
     menuGif.classList.add('falling');
     
-    // Step 3: WAIT for animation to finish (1.5 seconds), THEN hide menu and start game
     setTimeout(function() {
-        menuContainer.classList.add('hidden'); // Now hide the menu
-        gameLoop(); // Now start the game
-    }, 1500); // 1500ms = 1.5 seconds (matches the CSS animation duration)
+        menuContainer.classList.add('hidden');
+        gameState = 'playing'; // Set game state
+        gameLoop();
+    }, 1500);
+});
+
+// Try Again button handler (NEW)
+tryAgainButton.addEventListener('click', function() {
+    // Hide game over screen
+    gameOverContainer.classList.add('hidden');
+    
+    // Reset game state
+    resetGame();
+    
+    // Start playing again
+    gameState = 'playing';
+    gameLoop();
 });
 var player1Score = 0;
 var lives = 5;
@@ -72,44 +114,52 @@ function drawplayer1Score() {
 
 
 function gameLoop() {
+    // IMPORTANT: Only run if playing
+    if (gameState !== 'playing') return;
+    
     // Clear the entire canvas
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     
-    moveLogs();  // Move the logs
-    
+    moveLogs();
     drawLogs();
     drawPlayer(player);
     drawPlayer(player2);
+    
     if (speed < 6.5) {
         speed += .001;
     }
     if (logInterval >= 500) {
         spawnLog();
-        logInterval = 0; // Reset the interval
+        logInterval = 0;
     } else {
-        logInterval += speed; // Approximate time for one frame at 60fps
+        logInterval += speed;
     }
     
-    // Check for collisions with logs
+    // Check collisions
     if (--player.invincibleFrames <= 0) {
         player.color = "blue";
         for (let i = 0; i < logs.length; i++) {
             if (checkCollision(player, logs[i])) {
                 player.color = "red";
                 player.lives--;
-                player.invincibleFrames = 60; // 1 seconds of invincibility at 60fps
+                player.invincibleFrames = 60;
                 player1Score -= 1000;
                 break;
             }
         }
     }
-    player1Score += 1; // Increment score for surviving
+    
+    player1Score += 1;
     drawplayer1Score();
     drawLives();
+    
+    // Check for game over (MODIFIED)
     if (player.lives <= 0) {
-        alert('Player 1 loses!');
-        document.location.reload();
+        gameState = 'gameover'; // Stop the game loop
+        gameOverContainer.classList.remove('hidden'); // Show game over screen
+        return; // Exit game loop
     }
+    
     requestAnimationFrame(gameLoop);
 }
 
