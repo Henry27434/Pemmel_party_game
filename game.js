@@ -3,20 +3,9 @@ const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
 // player
 var startButton = document.getElementById('startButton');
-var menuContainer = document.getElementById('menuContainer');
-var menuGif = document.getElementById('menuGif');
 startButton.addEventListener('click', function() {
-    // Step 1: Hide button immediately
-    startButton.classList.add('hidden');
-    
-    // Step 2: Start the GIF falling animation
-    menuGif.classList.add('falling');
-    
-    // Step 3: WAIT for animation to finish (1.5 seconds), THEN hide menu and start game
-    setTimeout(function() {
-        menuContainer.classList.add('hidden'); // Now hide the menu
-        gameLoop(); // Now start the game
-    }, 1500); // 1500ms = 1.5 seconds (matches the CSS animation duration)
+    startButton.style.display = 'none'; // Hide the button after starting the game
+    gameLoop(); // Start the game loop
 });
 var player1Score = 0;
 var lives = 5;
@@ -164,4 +153,3 @@ function checkCollision(playerObj, log) {
         playerObj.y + playerObj.height > log.y
     );
 }
-
