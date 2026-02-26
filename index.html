@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pummel Party Game</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <!-- Menu Screen (shows first) -->
+    <div id="menuContainer">
+        <h1>Pummel Party Game</h1>
+        <img id="menuGif" src="animation.gif" alt="Game animation">
+        <button id="startButton">START</button>
+    </div>
+
+    <!-- Game Screen (hidden until start is clicked) -->
+    <canvas id="gameCanvas" width="1500" height="600"></canvas>
+    
+    <!-- Background GIFs for gameplay -->
+    <img class="backgroundGif" src="animation.gif" alt="Background 1" 
+         style="top: 10px; right: 750px; width: 750px; height: auto;">
+    <img class="backgroundGif" src="animation.gif" alt="Background 2" 
+         style="top: 10px; right: 1000px; width: 750px; height: auto;">
+    <img class="backgroundGif" src="animation2.gif" alt="Background 3" 
+         style="top: 10px; right: 300px; width: 500px; height: auto;">
+
+    <script src="game.js"></script> 
+</body>
+</html>
